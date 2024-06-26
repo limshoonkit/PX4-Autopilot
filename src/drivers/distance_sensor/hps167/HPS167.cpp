@@ -4,7 +4,7 @@
 
 #include <lib/drivers/device/Device.hpp>
 
-static constexpr unsigned int crc_lut_8[256]={ /* CRC byte look up table */
+static constexpr unsigned int crc_lut_8[256] = { /* CRC byte look up table */
 	0x0000, 0x1021, 0x2042, 0x3063, 0x4084, 0x50a5, 0x60c6, 0x70e7,
 	0x8108, 0x9129, 0xa14a, 0xb16b, 0xc18c, 0xd1ad, 0xe1ce, 0xf1ef,
 	0x1231, 0x0210, 0x3273, 0x2252, 0x52b5, 0x4294, 0x72f7, 0x62d6,
@@ -47,13 +47,14 @@ uint16_t
 HPS167::crc16_calc(const unsigned char *data_frame, uint8_t crc16_length)
 {
 	unsigned short crc_16 = 0xffff;
-	while(crc16_length-- != 0)
-	{
-		unsigned int high = (unsigned int)(crc_16/256);
+
+	while (crc16_length-- != 0) {
+		unsigned int high = (unsigned int)(crc_16 / 256);
 		crc_16 <<= 8;
 		crc_16 ^= crc_lut_8[high^*data_frame];
 		data_frame++;
 	}
+
 	return crc_16;
 }
 
@@ -115,8 +116,10 @@ HPS167::collect()
 		uint8_t data[11]; // Byte [2] - [12]
 		memcpy(data, &_linebuf[2], sizeof(data));
 		uint16_t cal_crc = crc16_calc(data, sizeof(data));
-		if (packet_crc == cal_crc)
+
+		if (packet_crc == cal_crc) {
 			crc_valid = true;
+		}
 	}
 
 	if (!crc_valid) {
@@ -147,6 +150,7 @@ int
 HPS167::open_serial_port(const speed_t speed)
 {
 	PX4_INFO("opening serial port");
+
 	// File descriptor initialized?
 	if (_file_descriptor > 0) {
 		PX4_INFO("serial port already open");
