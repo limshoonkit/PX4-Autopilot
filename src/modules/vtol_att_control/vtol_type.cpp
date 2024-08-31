@@ -164,6 +164,8 @@ void VtolType::update_transition_state()
 	_time_since_trans_start = (float)(t_now - _transition_start_timestamp) * 1e-6f;
 
 	check_quadchute_condition();
+
+	_last_thr_in_mc = _vehicle_thrust_setpoint_virtual_mc->xyz[2];
 }
 
 float VtolType::update_and_get_backtransition_pitch_sp()
@@ -561,10 +563,10 @@ float VtolType::pusher_assist()
 		tilt_new = R_yaw_correction * tilt_new;
 
 		// now extract roll and pitch setpoints
-		_v_att_sp->pitch_body = atan2f(tilt_new(0), tilt_new(2));
-		_v_att_sp->roll_body = -asinf(tilt_new(1));
+		const float pitch_body = atan2f(tilt_new(0), tilt_new(2));
+		const float roll_body = -asinf(tilt_new(1));
 
-		const Quatf q_sp(Eulerf(_v_att_sp->roll_body, _v_att_sp->pitch_body, euler_sp(2)));
+		const Quatf q_sp(Eulerf(roll_body, pitch_body, euler_sp(2)));
 		q_sp.copyTo(_v_att_sp->q_d);
 	}
 
