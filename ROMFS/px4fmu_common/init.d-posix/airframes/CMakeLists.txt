@@ -103,9 +103,12 @@ px4_add_romfs_files(
 	10040_sihsim_quadx
 	10041_sihsim_airplane
 	10042_sihsim_xvert
+	10043_sihsim_s500
 
 	17001_flightgear_tf-g1
 	17002_flightgear_tf-g2
+
+	22000_isaacsim_s500
 
 	# [22000, 22999] Reserve for custom models
 )

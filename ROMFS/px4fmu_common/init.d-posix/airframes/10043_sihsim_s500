@@ -1,0 +1,169 @@
+#!/bin/sh
+#
+# @name QuadrotorX SITL for SIH
+#
+# @type Quadrotor
+#
+# @maintainer Romain Chiappinelli <romain.chiap@gmail.com>
+#
+
+. ${R}etc/init.d/rc.mc_defaults
+
+PX4_SIMULATOR=${PX4_SIMULATOR:=sihsim}
+PX4_SIM_MODEL=${PX4_SIM_MODEL:=s500}
+
+param set-default SENS_EN_GPSSIM 1
+param set-default SENS_EN_BAROSIM 1
+param set-default SENS_EN_MAGSIM 1
+
+# disable some checks to allow to fly:
+# - without real battery
+param set-default CBRK_SUPPLY_CHK 894281
+
+# dynamics (uosm dogpa)
+param set-default SIH_MASS 1.58
+param set-default SIH_IXX 0.01002
+param set-default SIH_IYY 0.01003
+param set-default SIH_IZZ 0.01753
+param set-default SIH_IXY 0.0
+param set-default SIH_IXZ -0.00022
+param set-default SIH_IYZ -0.00001
+param set-default SIH_T_MAX 13.06
+param set-default SIH_Q_MAX 0.18
+param set-default SIH_L_ROLL 0.24
+param set-default SIH_L_PITCH 0.24
+
+# location (uosm)
+param set-default SIH_LOC_LAT0 1.4404661573421664
+param set-default SIH_LOC_LON0 103.61610159371685
+param set-default SIH_LOC_H0 23.0
+
+# s500 PX4 numbering (uosm dogpa)
+param set-default CA_ROTOR_COUNT 4
+
+param set-default CA_ROTOR0_CT	6.500000000000000000	
+param set-default CA_ROTOR0_KM	0.050000000745058060	
+param set-default CA_ROTOR0_PX	0.150000005960464478	
+param set-default CA_ROTOR0_PY	0.150000005960464478	
+
+param set-default CA_ROTOR1_CT	6.500000000000000000	
+param set-default CA_ROTOR1_KM	0.050000000745058060	
+param set-default CA_ROTOR1_PX	-0.150000005960464478	
+param set-default CA_ROTOR1_PY	-0.150000005960464478		
+
+param set-default CA_ROTOR2_CT	6.500000000000000000	
+param set-default CA_ROTOR2_KM	-0.050000000745058060	
+param set-default CA_ROTOR2_PX	0.150000005960464478	
+param set-default CA_ROTOR2_PY	-0.150000005960464478	
+
+param set-default CA_ROTOR3_CT	6.500000000000000000	
+param set-default CA_ROTOR3_KM	-0.050000000745058060	
+param set-default CA_ROTOR3_PX	-0.150000005960464478	
+param set-default CA_ROTOR3_PY	0.150000005960464478
+
+param set-default PWM_MAIN_FUNC1 101
+param set-default PWM_MAIN_FUNC2 102
+param set-default PWM_MAIN_FUNC3 103
+param set-default PWM_MAIN_FUNC4 104
+
+# controller params
+param set MC_ROLLRATE_P	0.144999995827674866
+param set MC_ROLLRATE_I	0.259000003337860107
+param set MC_ROLLRATE_D	0.003349999897181988
+
+param set MC_PITCHRATE_P 0.130999997258186340
+param set MC_PITCHRATE_I 0.229000002145767212
+param set MC_PITCHRATE_D 0.002640000078827143
+
+param set MC_YAWRATE_P	0.150000005960464478
+param set MC_YAWRATE_I	0.100000001490116119
+param set MC_YAWRATE_D	0.000000000000000000
+
+param set MPC_THR_HOVER	0.3
+
+param set SIH_VEHICLE_TYPE 0
+
+# calibration (id from /PX4-Autopilot/ROMFS/px4fmu_common/init.d-posix/rcS)
+# param set CAL_ACC0_ID 1310988	
+# param set CAL_ACC0_PRIO	50	
+# param set CAL_ACC0_ROT	-1	
+# param set CAL_ACC0_XOFF	-0.085914134979248047	
+# param set CAL_ACC0_XSCALE 0.984012544155120850	
+# param set CAL_ACC0_YOFF	-0.184882640838623047	
+# param set CAL_ACC0_YSCALE 0.991964578628540039	
+# param set CAL_ACC0_ZOFF	0.218735694885253906	
+# param set CAL_ACC0_ZSCALE 0.982494056224822998	
+# param set CAL_ACC1_ID 1310996	
+# param set CAL_ACC1_PRIO	50	
+# param set CAL_ACC1_ROT -1	
+# param set CAL_ACC1_XOFF	-0.008540630340576172	
+# param set CAL_ACC1_XSCALE 1.002129793167114258	
+# param set CAL_ACC1_YOFF	0.011816978454589844	
+# param set CAL_ACC1_YSCALE 1.003231883049011230	
+# param set CAL_ACC1_ZOFF	-0.160300254821777344	
+# param set CAL_ACC1_ZSCALE 1.004162430763244629	
+# param set CAL_ACC2_ID 0	
+# param set CAL_ACC3_ID 0	
+# param set CAL_AIR_CMODEL 0	
+# param set CAL_AIR_TUBED_MM 1.500000000000000000	
+# param set CAL_AIR_TUBELEN 0.200000002980232239	
+# param set CAL_BARO0_ID 0	
+# param set CAL_BARO1_ID 0	
+# param set CAL_BARO2_ID 0	
+# param set CAL_BARO3_ID 0	
+# param set CAL_GYRO0_ID 1310988	
+# param set CAL_GYRO0_PRIO 50	
+# param set CAL_GYRO0_ROT	-1	
+# param set CAL_GYRO0_XOFF 0.000000000000000000	
+# param set CAL_GYRO0_YOFF 0.000000000000000000	
+# param set CAL_GYRO0_ZOFF 0.000000000000000000	
+# param set CAL_GYRO1_ID	1310996	
+# param set CAL_GYRO1_PRIO 50	
+# param set CAL_GYRO1_ROT	-1
+# param set CAL_GYRO1_XOFF 0.007827966473996639	
+# param set CAL_GYRO1_YOFF -0.012296737171709538	
+# param set CAL_GYRO1_ZOFF -0.004210817161947489	
+# param set CAL_GYRO2_ID 0	
+# param set CAL_GYRO3_ID 0
+# param set CAL_MAG0_ID 197388	
+# param set CAL_MAG0_PITCH 0.000000000000000000	
+# param set CAL_MAG0_PRIO	50	
+# param set CAL_MAG0_ROLL	0.000000000000000000	
+# param set CAL_MAG0_ROT -1	
+# param set CAL_MAG0_XCOMP 0.000000000000000000	
+# param set CAL_MAG0_XODIAG -0.010397152975201607	
+# param set CAL_MAG0_XOFF	-0.050527706742286682	
+# param set CAL_MAG0_XSCALE 1.049663782119750977	
+# param set CAL_MAG0_YAW	0.000000000000000000	
+# param set CAL_MAG0_YCOMP 0.000000000000000000	
+# param set CAL_MAG0_YODIAG -0.070018298923969269	
+# param set CAL_MAG0_YOFF	0.023857714608311653	
+# param set CAL_MAG0_YSCALE 1.189255952835083008	
+# param set CAL_MAG0_ZCOMP 0.000000000000000000	
+# param set CAL_MAG0_ZODIAG -0.069513849914073944	
+# param set CAL_MAG0_ZOFF	0.085655659437179565	
+# param set CAL_MAG0_ZSCALE 1.017580628395080566	
+# param set CAL_MAG1_ID 197644	
+# param set CAL_MAG1_PITCH 0.000000000000000000	
+# param set CAL_MAG1_PRIO	75	
+# param set CAL_MAG1_ROLL	0.000000000000000000	
+# param set CAL_MAG1_ROT	0	
+# param set CAL_MAG1_XCOMP 0.000000000000000000	
+# param set CAL_MAG1_XODIAG 0.001165566383861005	
+# param set CAL_MAG1_XOFF	-0.027402710169553757	
+# param set CAL_MAG1_XSCALE 0.978679835796356201	
+# param set CAL_MAG1_YAW	0.000000000000000000	
+# param set CAL_MAG1_YCOMP 0.000000000000000000	
+# param set CAL_MAG1_YODIAG -0.036867849528789520	
+# param set CAL_MAG1_YOFF	-0.025854807347059250	
+# param set CAL_MAG1_YSCALE 0.993251383304595947	
+# param set CAL_MAG1_ZCOMP 0.000000000000000000	
+# param set CAL_MAG1_ZODIAG -0.021786129102110863	
+# param set CAL_MAG1_ZOFF	-0.033334869891405106	
+# param set CAL_MAG1_ZSCALE 1.037298083305358887	
+# param set CAL_MAG2_ID 0	
+# param set CAL_MAG2_ROT -1	
+# param set CAL_MAG3_ID 0	
+# param set CAL_MAG3_ROT -1	
+# param set CAL_MAG_COMP_TYP	0	
+# param set CAL_MAG_SIDES	63
