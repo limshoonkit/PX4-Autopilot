@@ -69,3 +69,13 @@ add_custom_target(none_iris
 		${PX4_SOURCE_DIR}/ROMFS/px4fmu_common/init.d-posix/airframes/10016_none_iris
 	COMMENT "launching px4 none_iris (SYS_AUTOSTART=10016)"
 )
+
+add_custom_target(isaacsim_s500
+	COMMAND ${CMAKE_COMMAND} -E env PX4_SYS_AUTOSTART=22000 $<TARGET_FILE:px4>
+	WORKING_DIRECTORY ${SITL_WORKING_DIR}
+	USES_TERMINAL
+	DEPENDS
+		px4
+		${PX4_SOURCE_DIR}/ROMFS/px4fmu_common/init.d-posix/airframes/22000_isaacsim_s500
+	COMMENT "launching px4 22000_isaacsim_s500 (SYS_AUTOSTART=22000)"
+)
